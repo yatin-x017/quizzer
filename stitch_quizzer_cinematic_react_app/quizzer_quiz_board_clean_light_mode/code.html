@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quizzer - Board</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#eaeef3",
+                      "on-tertiary-container": "#00486a",
+                      "on-primary-fixed": "#001e2c",
+                      "secondary-container": "#a2ebfa",
+                      "tertiary-fixed-dim": "#89ceff",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#d6dbdf",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#43bbff",
+                      "tertiary": "#006591",
+                      "surface": "#f5faff",
+                      "primary": "#00668a",
+                      "on-secondary-fixed-variant": "#004e59",
+                      "surface-container-low": "#eff4f9",
+                      "surface-bright": "#f5faff",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#001f25",
+                      "primary-fixed": "#c4e7ff",
+                      "on-background": "#171c20",
+                      "inverse-surface": "#2c3135",
+                      "outline-variant": "#bdc8d1",
+                      "on-secondary-container": "#186c79",
+                      "inverse-on-surface": "#edf1f6",
+                      "outline": "#6e7980",
+                      "surface-container-highest": "#dee3e8",
+                      "secondary-fixed-dim": "#89d2e0",
+                      "surface-container-high": "#e4e9ee",
+                      "on-tertiary-fixed-variant": "#004c6e",
+                      "inverse-primary": "#7bd0ff",
+                      "background": "#f5faff",
+                      "error": "#ba1a1a",
+                      "on-surface-variant": "#3e484f",
+                      "on-primary-fixed-variant": "#004c69",
+                      "on-primary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#004965",
+                      "primary-container": "#38bdf8",
+                      "surface-variant": "#dee3e8",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#a5eefd",
+                      "surface-tint": "#00668a",
+                      "on-tertiary-fixed": "#001e2f",
+                      "tertiary-fixed": "#c9e6ff",
+                      "secondary": "#0f6875",
+                      "primary-fixed-dim": "#7bd0ff",
+                      "on-surface": "#171c20"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "unit": "8px",
+                      "container-max": "1200px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Manrope"
+                      ],
+                      "headline-md": [
+                              "Manrope"
+                      ],
+                      "body-md": [
+                              "Manrope"
+                      ],
+                      "headline-sm": [
+                              "Manrope"
+                      ],
+                      "body-lg": [
+                              "Manrope"
+                      ],
+                      "label-md": [
+                              "Manrope"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #38BDF8, #5FA8B6);
+            box-shadow: 0 6px 20px rgba(56,189,248,0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(56,189,248,0.35);
+        }
+        .answer-card {
+            transition: all 0.2s ease-in-out;
+            border: 1px solid rgba(15,23,42,0.05);
+        }
+        .answer-card:hover {
+            background-color: rgba(56,189,248,0.05);
+            border-color: rgba(56,189,248,0.3);
+        }
+        .answer-card.selected {
+            border: 2px solid #38BDF8;
+            background-color: rgba(56,189,248,0.1);
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #38BDF8, #0EA5E9);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md text-on-surface antialiased pt-[88px] min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-md full-width top-0 border-b border-outline-variant/20 dark:border-white/10 shadow-sm dark:shadow-2xl fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-md">
+<div class="font-display-lg text-display-lg font-extrabold text-primary-container">
+            Quizzer
+        </div>
+<div class="flex items-center gap-4">
+<button aria-label="Toggle Dark Mode" class="p-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-gutter md:p-margin-desktop w-full max-w-container-max mx-auto">
+<div class="w-full max-w-3xl bg-surface-container-lowest rounded-xl card-shadow p-6 md:p-10 border border-outline-variant/10 flex flex-col gap-8">
+<!-- Header: Progress & Timer -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant/20 pb-6">
+<div class="flex-1 w-full">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Question 4 of 10</span>
+<span class="font-label-md text-label-md text-primary font-bold">40%</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full progress-fill rounded-full" style="width: 40%;"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-surface-container py-2 px-4 rounded-lg">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="timer">timer</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">02:45</span>
+</div>
+</div>
+<!-- Question Area -->
+<div class="flex flex-col gap-6">
+<div class="flex gap-4 items-start">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center shrink-0">
+<img alt="" class="w-full h-full object-cover rounded-lg" data-alt="A stylized geometric illustration representing data structures, featuring glowing interconnected nodes in cyan and deep blue, set against a pristine white background with soft, modern lighting. The aesthetic is highly polished, tech-forward, and abstract." src="https://lh3.googleusercontent.com/aida/ADBb0uhEspHVHi54ACermDiFGcEQkdXzIl_MfCPeVfU5DEWQOQZZzDIg7iFuqEn0rWqF-w0d_koAb7UAkboYkPX-M1JyZhw97khtVXGnyjcUPLiUh3ovH0uA2FNCQoQnYGC8ToQqJ5nrJzxfkEfg0P8ljOShpEFzAXfAgb-mWZ3BcuF3lfWH5zbr-hlGA-bhRhe8-NWimFxj9RSvWUMXX2hUemvtXa0zY5StG9XSVd3Z8yZp01mZRtl2nGmWDB_eqok0GPt6lobqzhjYGDs"/>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface leading-tight">
+                        In computer science, what is the time complexity of searching for an element in a balanced Binary Search Tree (BST)?
+                    </h2>
+</div>
+<!-- Answer Options -->
+<div class="flex flex-col gap-3 mt-4">
+<button class="answer-card w-full text-left p-4 rounded-lg flex items-center gap-4 group focus:outline-none">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary-container shrink-0 text-on-surface-variant font-label-md">A</div>
+<span class="font-body-lg text-body-lg text-on-surface">O(1)</span>
+</button>
+<button class="answer-card w-full text-left p-4 rounded-lg flex items-center gap-4 group focus:outline-none">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary-container shrink-0 text-on-surface-variant font-label-md">B</div>
+<span class="font-body-lg text-body-lg text-on-surface">O(n)</span>
+</button>
+<button class="answer-card selected w-full text-left p-4 rounded-lg flex items-center gap-4 focus:outline-none">
+<div class="w-8 h-8 rounded-full border-2 border-primary-container bg-primary-container text-on-primary flex items-center justify-center shrink-0 font-label-md">C</div>
+<span class="font-body-lg text-body-lg text-on-surface font-semibold">O(log n)</span>
+<span class="material-symbols-outlined ml-auto text-primary-container" data-icon="check_circle">check_circle</span>
+</button>
+<button class="answer-card w-full text-left p-4 rounded-lg flex items-center gap-4 group focus:outline-none">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary-container shrink-0 text-on-surface-variant font-label-md">D</div>
+<span class="font-body-lg text-body-lg text-on-surface">O(n log n)</span>
+</button>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex justify-between items-center mt-6 pt-6 border-t border-outline-variant/20">
+<button class="px-6 py-3 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                    Previous
+                </button>
+<button class="btn-primary px-8 py-4 rounded-xl font-label-md text-label-md text-on-primary flex items-center gap-2">
+                    Submit Answer
+                    <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface full-width py-lg border-t border-outline-variant/10 dark:border-white/5 w-full flex flex-col md:flex-row justify-between items-center px-gutter gap-md max-w-7xl mx-auto mt-auto">
+<div class="font-display-lg text-label-md font-bold text-primary-container">
+            Quizzer
+        </div>
+<div class="flex gap-6 items-center">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline hover:text-primary-container transition-colors duration-300 ease-out" href="#">Privacy</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline hover:text-primary-container transition-colors duration-300 ease-out" href="#">Terms</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline hover:text-primary-container transition-colors duration-300 ease-out" href="#">Help Center</a>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant dark:text-outline">
+            © 2024 Quizzer. Elevating intellect.
+        </div>
+</footer>
+</body></html>
