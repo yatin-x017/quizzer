@@ -1,7 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
 
-function Navbar() {
+function Navbar({ user }) {
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
+
+  const btnStyle = {
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    color: "#fff",
+    textDecoration: "none",
+  };
 
   return (
     <nav style={{ backgroundColor: "#2563eb", padding: "20px 40px" }}>
@@ -14,10 +28,8 @@ function Navbar() {
           margin: "0 auto",
         }}
       >
-        <div
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/")}
-        >
+        {/* Logo */}
+        <div style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
           <p
             style={{
               margin: 0,
@@ -30,58 +42,35 @@ function Navbar() {
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "30px" }}>
-          <button
-            onClick={() => navigate("/")}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
+        <div style={{ display: "flex", gap: "30px", alignItems: "center" }}>
+          <button onClick={() => navigate("/")} style={btnStyle}>
             Home
           </button>
 
-          <button
-            onClick={() => navigate("/quizzes")}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
+          <button onClick={() => navigate("/quizzes")} style={btnStyle}>
             Quizzes
           </button>
 
-          <button
-            onClick={() => navigate("/results")}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
+          <button onClick={() => navigate("/results")} style={btnStyle}>
             Results
           </button>
 
-          <button
-            onClick={() => navigate("/signin")}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
-            Sign In
-          </button>
+          {/* 🔥 Fixed Conditional */}
+          {user ? (
+            <>
+              <span style={{ color: "#fff", fontSize: "14px" }}>
+                {user.email}
+              </span>
+
+              <button onClick={handleLogout} style={btnStyle}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <button onClick={() => navigate("/signin")} style={btnStyle}>
+              Sign In
+            </button>
+          )}
         </div>
       </div>
     </nav>

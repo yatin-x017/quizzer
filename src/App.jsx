@@ -31,7 +31,7 @@ export default function App() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar user={user} />
 
       <div style={{ textAlign: "center", marginTop: "10px" }}>
         {user ? (
