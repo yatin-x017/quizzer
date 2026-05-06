@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 
+import "./index.css";
+import "./theme/theme.css";
+
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 
@@ -30,23 +33,17 @@ export default function App() {
   }, []);
 
   return (
-    <div>
+    <div className="app-layout">
       <Navbar user={user} />
 
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
-        {user ? (
-          <p>Welcome {user.email}</p>
-        ) : (
-          <p>Not logged in</p>
-        )}
-      </div>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/quizzes" element={<Quiz />} />
-        <Route path="/results" element={<Result />} />
-        <Route path="/signin" element={<SignIn />} />
-      </Routes>
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/quizzes" element={<Quiz />} />
+          <Route path="/results" element={<Result />} />
+          <Route path="/signin" element={<SignIn />} />
+        </Routes>
+      </main>
 
       <Footer />
     </div>

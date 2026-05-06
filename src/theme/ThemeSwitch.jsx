@@ -1,55 +1,47 @@
-"use client";
-
-import { MoonIcon, SunIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import "./theme.css";
 
 const ThemeSwitch = () => {
-  const [checked, setChecked] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // On mount, check localStorage for theme
     const theme = localStorage.getItem("theme");
     if (theme === "dark") {
-      setChecked(true);
+      setIsDark(true);
       document.documentElement.classList.add("dark");
     } else {
-      setChecked(false);
+      setIsDark(false);
       document.documentElement.classList.remove("dark");
     }
   }, []);
 
-  const handleCheckedChange = useCallback(
-    (isChecked) => {
-      setChecked(isChecked);
-      if (isChecked) {
+  const toggleTheme = useCallback(() => {
+    setIsDark((prev) => {
+      const next = !prev;
+      if (next) {
         document.documentElement.classList.add("dark");
         localStorage.setItem("theme", "dark");
       } else {
         document.documentElement.classList.remove("dark");
         localStorage.setItem("theme", "light");
       }
-    },
-    []
-  );
+      return next;
+    });
+  }, []);
 
   if (!mounted) return null;
 
   return (
-    <div className="theme-switch-root">
-      <label className="theme-switch">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={e => handleCheckedChange(e.target.checked)}
-        />
-        <span className="slider">
-          {checked ? <MoonIcon size={16} /> : <SunIcon size={16} />}
-        </span>
-      </label>
-    </div>
+    <button
+      className="theme-toggle-btn"
+      onClick={toggleTheme}
+      aria-label="Toggle Dark Mode"
+    >
+      <span className="material-symbols-outlined">
+        {isDark ? "light_mode" : "dark_mode"}
+      </span>
+    </button>
   );
 };
 

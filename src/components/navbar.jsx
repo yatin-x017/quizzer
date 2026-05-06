@@ -1,87 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import ThemeSwitch from "../theme/ThemeSwitch";
 
 function Navbar({ user }) {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
-
-  const btnStyle = {
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    color: "#fff",
-    textDecoration: "none",
-  };
-
   return (
-    <nav
-      style={{
-        backgroundColor: "#2563eb",
-        padding: "20px 40px",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        zIndex: 1000,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        {/* Logo */}
-        <div style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "20px",
-              fontWeight: "bold",
-              color: "#fff",
-            }}
-          >
-            Quizzer
-          </p>
+    <header className="navbar">
+      <div className="navbar-inner">
+        <div className="navbar-logo" onClick={() => navigate("/")}>
+          <span className="material-symbols-outlined">psychology</span>
+          Quizzer
         </div>
 
-        <div style={{ display: "flex", gap: "30px", alignItems: "center" }}>
-          <button onClick={() => navigate("/")} style={btnStyle}>
-            Home
+        <div className="navbar-actions">
+          <ThemeSwitch />
+          <button
+            className="navbar-icon-btn"
+            aria-label="Account"
+            onClick={() => (user ? null : navigate("/signin"))}
+          >
+            <span className="material-symbols-outlined">account_circle</span>
           </button>
-
-          <button onClick={() => navigate("/quizzes")} style={btnStyle}>
-            Quizzes
-          </button>
-
-          <button onClick={() => navigate("/results")} style={btnStyle}>
-            Results
-          </button>
-          {user ? (
-            <>
-              <span style={{ color: "#fff", fontSize: "14px" }}>
-                {user.email}
-              </span>
-
-              <button onClick={handleLogout} style={btnStyle}>
-                Logout
-              </button>
-            </>
-          ) : (
-            <button onClick={() => navigate("/signin")} style={btnStyle}>
-              Sign In
-            </button>
-          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
 

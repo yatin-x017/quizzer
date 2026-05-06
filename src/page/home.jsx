@@ -1,56 +1,80 @@
 import React from "react";
-import ThemeSwitch from "../theme/ThemeSwitch";
+import { useNavigate } from "react-router-dom";
 import "../theme/theme.css";
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
-    <div className="landing-root">
-      <header className="landing-header">
-        <ThemeSwitch />
-      </header>
-      <main className="landing-main">
-        <h1 className="landing-title">
-          Ready to Test Your <span className="landing-title-accent">Knowledge?</span>
-        </h1>
-        <p className="landing-desc">
-          Challenge yourself with thousands of questions across diverse categories.<br />
-          Climb the global ranks and prove your intellect in the ultimate quiz arena.
-        </p>
-        <button className="landing-btn">Start Quiz</button>
-        <section className="landing-cards">
-          <div className="landing-card">
-            <div className="landing-card-icon">📚</div>
-            <div className="landing-card-title">Diverse Categories</div>
-            <div className="landing-card-desc">
-              From history and science to pop culture and sports, explore a vast library of meticulously curated topics.
+    <>
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">
+            Ready to Test Your{" "}
+            <span className="hero-title-accent">Knowledge?</span>
+          </h1>
+
+          <p className="hero-description">
+            Enter the arena of intellect. Challenge yourself across infinite
+            topics, race the clock, and climb the global leaderboards in a
+            sleek, high-performance environment.
+          </p>
+
+          <button
+            className="hero-cta"
+            onClick={() => navigate("/quizzes")}
+          >
+            <span className="material-symbols-outlined">play_arrow</span>
+            Start Quiz
+          </button>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="features-section">
+        <div className="features-grid">
+          {/* Feature Card 1 */}
+          <div className="feature-card">
+            <div className="feature-card-icon">
+              <span className="material-symbols-outlined">category</span>
             </div>
+            <h3 className="feature-card-title">Diverse Categories</h3>
+            <p className="feature-card-desc">
+              From aerospace engineering to ancient history, our vast database
+              covers thousands of meticulously curated topics to test your
+              depth of knowledge.
+            </p>
           </div>
-          <div className="landing-card">
-            <div className="landing-card-icon">⏱️</div>
-            <div className="landing-card-title">Time Attacks</div>
-            <div className="landing-card-desc">
-              Race against the clock in high-stakes time attack modes. Perfect for quick mental workouts and adrenaline rushes.
+
+          {/* Feature Card 2 */}
+          <div className="feature-card">
+            <div className="feature-card-icon">
+              <span className="material-symbols-outlined">timer</span>
             </div>
+            <h3 className="feature-card-title">Time Attacks</h3>
+            <p className="feature-card-desc">
+              Feel the pressure in rapid-fire modes. Precision and speed are
+              rewarded equally as you race against the relentless countdown
+              timer.
+            </p>
           </div>
-          <div className="landing-card">
-            <div className="landing-card-icon">🌐</div>
-            <div className="landing-card-title">Global Ranks</div>
-            <div className="landing-card-desc">
-              Compete with players worldwide. Earn badges, climb the leaderboards, and establish your dominance.
+
+          {/* Feature Card 3 */}
+          <div className="feature-card">
+            <div className="feature-card-icon">
+              <span className="material-symbols-outlined">public</span>
             </div>
+            <h3 className="feature-card-title">Global Ranks</h3>
+            <p className="feature-card-desc">
+              Ascend the echelon of neo-scholars. Track your ELO, compare
+              stats with global competitors, and cement your legacy on the
+              leaderboards.
+            </p>
           </div>
-        </section>
-      </main>
-      <footer className="landing-footer">
-        <span>Quizzer</span>
-        <span>©2026 Quizzer. All rights reserved.</span>
-        <nav>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Help Center</a>
-        </nav>
-      </footer>
-    </div>
+        </div>
+      </section>
+    </>
   );
 }
 
