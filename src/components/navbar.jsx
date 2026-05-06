@@ -18,7 +18,17 @@ function Navbar({ user }) {
   };
 
   return (
-    <nav style={{ backgroundColor: "#2563eb", padding: "20px 40px" }}>
+    <nav
+      style={{
+        backgroundColor: "#2563eb",
+        padding: "20px 40px",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        zIndex: 1000,
+      }}
+    >
       <div
         style={{
           display: "flex",
@@ -54,8 +64,6 @@ function Navbar({ user }) {
           <button onClick={() => navigate("/results")} style={btnStyle}>
             Results
           </button>
-
-          {/* 🔥 Fixed Conditional */}
           {user ? (
             <>
               <span style={{ color: "#fff", fontSize: "14px" }}>
