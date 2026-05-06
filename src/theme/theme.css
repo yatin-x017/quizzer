@@ -17,10 +17,10 @@ body {
 }
 
 .theme-switch-root {
-  position: absolute;
-  top: 24px;
-  right: 32px;
-  z-index: 100;
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  z-index: 1001;
 }
 
 .theme-switch {
