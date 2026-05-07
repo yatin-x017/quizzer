@@ -6,14 +6,12 @@ function Result() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Read real quiz results from navigation state, fallback to defaults
   const score = location.state?.score ?? 3;
   const total = location.state?.total ?? 3;
   const timeTaken = location.state?.timeTaken ?? "01:48";
-  const streak = score; // streak matches correct answers for now
+  const streak = score; 
   const accuracy = Math.round((score / total) * 100);
 
-  // Dynamic title & subtitle based on score
   let resultTitle, resultSubtitle;
   if (score === total) {
     resultTitle = "Mastermind!";
@@ -26,7 +24,6 @@ function Result() {
     resultSubtitle = "Solid effort. Review and aim higher next time!";
   }
 
-  // Animate the score ring on mount
   const [animatedPct, setAnimatedPct] = useState(0);
 
   useEffect(() => {
@@ -36,7 +33,7 @@ function Result() {
     return () => clearTimeout(timeout);
   }, [accuracy]);
 
-  // SVG circle values
+
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const strokeOffset = circumference - (animatedPct / 100) * circumference;
@@ -44,7 +41,6 @@ function Result() {
   return (
     <div className="result-wrapper">
       <div className="result-panel">
-        {/* Title */}
         <div className="result-header">
           <h1 className="result-title">{resultTitle}</h1>
           <p className="result-subtitle">
@@ -52,7 +48,6 @@ function Result() {
           </p>
         </div>
 
-        {/* Score Ring */}
         <div className="result-ring-container">
           <svg
             className="result-ring-svg"
@@ -60,7 +55,6 @@ function Result() {
             height="180"
             viewBox="0 0 180 180"
           >
-            {/* Track */}
             <circle
               className="result-ring-track"
               cx="90"
@@ -69,7 +63,6 @@ function Result() {
               fill="none"
               strokeWidth="10"
             />
-            {/* Fill */}
             <circle
               className="result-ring-fill"
               cx="90"
@@ -89,7 +82,6 @@ function Result() {
           </div>
         </div>
 
-        {/* Stat Cards */}
         <div className="result-stats">
           <div className="result-stat-card">
             <span className="material-symbols-outlined result-stat-icon">check_circle</span>
@@ -110,7 +102,6 @@ function Result() {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="result-actions">
           <button
             className="result-btn-retake"

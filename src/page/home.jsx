@@ -7,7 +7,6 @@ function Home() {
 
   return (
     <>
-      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
@@ -31,7 +30,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
+
       <section className="features-section">
         <div className="features-grid">
           {/* Feature Card 1 */}
@@ -47,7 +46,7 @@ function Home() {
             </p>
           </div>
 
-          {/* Feature Card 2 */}
+
           <div className="feature-card">
             <div className="feature-card-icon">
               <span className="material-symbols-outlined">timer</span>
@@ -60,7 +59,6 @@ function Home() {
             </p>
           </div>
 
-          {/* Feature Card 3 */}
           <div className="feature-card">
             <div className="feature-card-icon">
               <span className="material-symbols-outlined">public</span>
