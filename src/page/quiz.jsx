@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../theme/theme.css";
 
 // Multi-question demo dataset matching the design aesthetics perfectly
@@ -45,6 +46,7 @@ const DEMO_QUESTIONS = [
 ];
 
 function Quiz() {
+  const navigate = useNavigate();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(180); // 3 minutes countdown
@@ -79,7 +81,23 @@ function Quiz() {
     if (currentIdx < DEMO_QUESTIONS.length - 1) {
       setCurrentIdx((prev) => prev + 1);
     } else {
-      setQuizFinished(true);
+      // Calculate actual results
+      const score = DEMO_QUESTIONS.reduce((acc, q, idx) => {
+        return acc + (selectedAnswers[idx] === q.correctAnswer ? 1 : 0);
+      }, 0);
+      const totalQuestions = DEMO_QUESTIONS.length;
+      const elapsedSeconds = 180 - timeLeft;
+      const mins = Math.floor(elapsedSeconds / 60);
+      const secs = elapsedSeconds % 60;
+      const timeTaken = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+      navigate("/results", {
+        state: {
+          score,
+          total: totalQuestions,
+          timeTaken,
+        },
+      });
     }
   };
 
@@ -96,44 +114,7 @@ function Quiz() {
     setQuizFinished(false);
   };
 
-  if (quizFinished) {
-    // Elegant Completion View
-    const score = DEMO_QUESTIONS.reduce((acc, q, idx) => {
-      return acc + (selectedAnswers[idx] === q.correctAnswer ? 1 : 0);
-    }, 0);
 
-    return (
-      <div className="quiz-wrapper">
-        <div className="quiz-panel" style={{ textAlign: "center", alignItems: "center" }}>
-          <div className="quiz-question-icon" style={{ fontSize: "48px", width: "80px", height: "80px", borderRadius: "50%", margin: "0 auto" }}>
-            🏆
-          </div>
-          <h2 className="quiz-question-text" style={{ fontSize: "32px", margin: "16px 0" }}>Quiz Completed!</h2>
-          <p className="hero-description" style={{ marginBottom: "24px" }}>
-            Great job! You finished the quiz. Here is your summary:
-          </p>
-          <div style={{ display: "flex", gap: "24px", margin: "16px 0" }}>
-            <div className="quiz-timer" style={{ padding: "16px 24px" }}>
-              <span className="quiz-timer-value" style={{ fontSize: "28px", color: "var(--primary)" }}>
-                {score} / {DEMO_QUESTIONS.length}
-              </span>
-              <span className="quiz-progress-count" style={{ display: "block", fontSize: "10px", marginTop: "4px" }}>SCORE</span>
-            </div>
-            <div className="quiz-timer" style={{ padding: "16px 24px" }}>
-              <span className="quiz-timer-value" style={{ fontSize: "28px" }}>
-                {Math.round((score / DEMO_QUESTIONS.length) * 100)}%
-              </span>
-              <span className="quiz-progress-count" style={{ display: "block", fontSize: "10px", marginTop: "4px" }}>ACCURACY</span>
-            </div>
-          </div>
-          <button className="hero-cta" onClick={handleRestart} style={{ cursor: "pointer", border: "none" }}>
-            Retake Quiz
-            <span className="material-symbols-outlined">restart_alt</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   const q = DEMO_QUESTIONS[currentIdx];
   const progressPct = Math.round(((currentIdx + 1) / DEMO_QUESTIONS.length) * 100);

@@ -12,7 +12,7 @@ function Footer() {
         </div>
 
         <div className="app-footer-copy">
-          © 2024 Quizzer Premium Education. All rights reserved.
+          © 2026 Quizzer Premium Education. All rights reserved.
         </div>
       </div>
     </footer>
