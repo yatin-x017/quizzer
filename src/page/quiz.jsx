@@ -2,165 +2,87 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../theme/theme.css";
 
-// Multi-question demo dataset matching the design aesthetics perfectly
-const DEMO_QUESTIONS = [
-  {
-    id: 1,
-    category: "COMPUTER SCIENCE",
-    difficulty: "HARD",
-    text: "In computer science, what is the time complexity of searching for an element in a balanced Binary Search Tree (BST)?",
-    options: [
-      { letter: "A", text: "O(1)" },
-      { letter: "B", text: "O(n)" },
-      { letter: "C", text: "O(log n)" },
-      { letter: "D", text: "O(n log n)" },
-    ],
-    correctAnswer: "C",
-  },
-  {
-    id: 2,
-    category: "DATABASE SYSTEMS",
-    difficulty: "HARD",
-    text: "In the context of database transaction processing, which ACID property ensures that a transaction is completed fully, or not at all?",
-    options: [
-      { letter: "A", text: "Consistency" },
-      { letter: "B", text: "Atomicity" },
-      { letter: "C", text: "Isolation" },
-      { letter: "D", text: "Durability" },
-    ],
-    correctAnswer: "B",
-  },
-  {
-    id: 3,
-    category: "WEB DEVELOPMENT",
-    difficulty: "MEDIUM",
-    text: "Which of the following CSS Display values makes an element behave like a block-level grid container while keeping flow inline?",
-    options: [
-      { letter: "A", text: "display: grid" },
-      { letter: "B", text: "display: block-grid" },
-      { letter: "C", text: "display: inline-grid" },
-      { letter: "D", text: "display: flow-grid" },
-    ],
-    correctAnswer: "C",
-  },
-];
-
 function Quiz() {
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes countdown
-  const [quizFinished, setQuizFinished] = useState(false);
-
-  // Countdown timer logic
   useEffect(() => {
-    if (timeLeft <= 0 || quizFinished) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, quizFinished]);
-
-  // Format seconds to MM:SS
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
+    fetch("https://opentdb.com/api.php?amount=10&type=multiple")
+      .then((res) => res.json())
+      .then((data) => {
+        const formatted = data.results.map((q, i) => {
+          const decode = (str) => {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = str;
+            return txt.value;
+          };
+          const correct = decode(q.correct_answer);
+          const all = [...q.incorrect_answers.map(decode), correct].sort(() => Math.random() - 0.5);
+          return {
+            id: i + 1,
+            category: decode(q.category).toUpperCase(),
+            difficulty: q.difficulty.toUpperCase(),
+            text: decode(q.question),
+            options: all.map((text, idx) => ({ letter: String.fromCharCode(65 + idx), text })),
+            correctAnswer: String.fromCharCode(65 + all.indexOf(correct)),
+          };
+        });
+        setQuestions(formatted);
+        setLoading(false);
+      });
+  }, []);
 
   const handleSelect = (letter) => {
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [currentIdx]: letter,
-    }));
+    setSelectedAnswers((prev) => ({ ...prev, [currentIdx]: letter }));
   };
 
   const handleNext = () => {
-    if (currentIdx < DEMO_QUESTIONS.length - 1) {
+    if (currentIdx < questions.length - 1) {
       setCurrentIdx((prev) => prev + 1);
     } else {
-      // Calculate actual results
-      const score = DEMO_QUESTIONS.reduce((acc, q, idx) => {
-        return acc + (selectedAnswers[idx] === q.correctAnswer ? 1 : 0);
-      }, 0);
-      const totalQuestions = DEMO_QUESTIONS.length;
-      const elapsedSeconds = 180 - timeLeft;
-      const mins = Math.floor(elapsedSeconds / 60);
-      const secs = elapsedSeconds % 60;
-      const timeTaken = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-
-      navigate("/results", {
-        state: {
-          score,
-          total: totalQuestions,
-          timeTaken,
-        },
-      });
+      const score = questions.reduce((acc, q, idx) => acc + (selectedAnswers[idx] === q.correctAnswer ? 1 : 0), 0);
+      navigate("/results", { state: { score, total: questions.length } });
     }
   };
 
   const handlePrev = () => {
-    if (currentIdx > 0) {
-      setCurrentIdx((prev) => prev - 1);
-    }
+    if (currentIdx > 0) setCurrentIdx((prev) => prev - 1);
   };
 
-  const handleRestart = () => {
-    setCurrentIdx(0);
-    setSelectedAnswers({});
-    setTimeLeft(180);
-    setQuizFinished(false);
-  };
+  if (loading) {
+    return <div className="quiz-wrapper"><p>Loading questions...</p></div>;
+  }
 
-
-
-  const q = DEMO_QUESTIONS[currentIdx];
-  const progressPct = Math.round(((currentIdx + 1) / DEMO_QUESTIONS.length) * 100);
+  const q = questions[currentIdx];
+  const progressPct = Math.round(((currentIdx + 1) / questions.length) * 100);
   const selectedLetter = selectedAnswers[currentIdx] || null;
 
   return (
     <div className="quiz-wrapper">
       <div className="quiz-panel">
-        {/* Progress & Timer Header */}
         <div className="quiz-header">
           <div className="quiz-progress-area">
             <div className="quiz-progress-labels">
-              <span className="quiz-progress-count">
-                Question {currentIdx + 1} of {DEMO_QUESTIONS.length}
-              </span>
+              <span className="quiz-progress-count">Question {currentIdx + 1} of {questions.length}</span>
               <span className="quiz-progress-pct">{progressPct}%</span>
             </div>
             <div className="quiz-progress-track">
-              <div
-                className="quiz-progress-fill"
-                style={{ width: `${progressPct}%` }}
-              />
+              <div className="quiz-progress-fill" style={{ width: `${progressPct}%` }} />
             </div>
-          </div>
-
-          <div className="quiz-timer">
-            <span className="material-symbols-outlined">timer</span>
-            <span className="quiz-timer-value">{formatTime(timeLeft)}</span>
           </div>
         </div>
 
-        {/* Question Area */}
         <div className="quiz-question-area">
-          {/* Category Tags */}
           <div className="quiz-tags">
             <span className="quiz-tag">{q.category}</span>
             <span className="quiz-tag quiz-tag-secondary">{q.difficulty}</span>
           </div>
-
-          {/* Question Text */}
           <div className="quiz-question-row">
             <div className="quiz-question-icon">📚</div>
             <h2 className="quiz-question-text">{q.text}</h2>
           </div>
-
-          {/* Answer Options */}
           <div className="quiz-answers">
             {q.options.map((opt) => (
               <button
@@ -171,16 +93,13 @@ function Quiz() {
                 <div className="quiz-answer-badge">{opt.letter}</div>
                 <span className="quiz-answer-text">{opt.text}</span>
                 <span className="quiz-answer-check">
-                  <span className="material-symbols-outlined">
-                    check_circle
-                  </span>
+                  <span className="material-symbols-outlined">check_circle</span>
                 </span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="quiz-actions">
           <button
             className="quiz-btn-prev"
@@ -197,7 +116,7 @@ function Quiz() {
             disabled={!selectedLetter}
             style={{ opacity: !selectedLetter ? 0.6 : 1, cursor: !selectedLetter ? "not-allowed" : "pointer", border: "none" }}
           >
-            {currentIdx === DEMO_QUESTIONS.length - 1 ? "Submit Quiz" : "Submit Answer"}
+            {currentIdx === questions.length - 1 ? "Submit Quiz" : "Submit Answer"}
             <span className="material-symbols-outlined">arrow_forward</span>
           </button>
         </div>
